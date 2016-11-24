@@ -8,17 +8,17 @@ size_label = 32;
 stride = 28;
 
 
-model = 'net-epoch-31.mat';
-load(model)
-pad_outputsize = 0;
-for lay = 1: length(netA.layers)
-    if strcmp(netA.layers{lay}.type, 'conv') ;
-        pad_outputsize = pad_outputsize + (size(netA.layers{lay}.weights{1},1)-1)/2;
-    end
-    if strcmp(netA.layers{lay}.type, 'pool') 
-        pad_outputsize = pad_outputsize + (netA.layers{lay}.pool(1)-1)/2;
-    end
-end
+% model = 'net-epoch-31.mat';
+% load(model)
+% pad_outputsize = 0;
+% for lay = 1: length(netA.layers)
+%     if strcmp(netA.layers{lay}.type, 'conv') ;
+%         pad_outputsize = pad_outputsize + (size(netA.layers{lay}.weights{1},1)-1)/2;
+%     end
+%     if strcmp(netA.layers{lay}.type, 'pool') 
+%         pad_outputsize = pad_outputsize + (netA.layers{lay}.pool(1)-1)/2;
+%     end
+% end
 
 %% initialization
 data = zeros(size_input, size_input, 3, 1);
@@ -34,14 +34,14 @@ filepaths = dir(fullfile(folder,'*.png'));
 
 aa = randperm(length(filepaths));
  
-for i =401:600
+for i =1:length(filepaths)
     if (mod(i,10) == 0)
-            fprintf('Extracting image: %d / %d\n', i, 600);
+            fprintf('Extracting image: %d / %d\n', i,length(filepaths));
     end
     image = imread(fullfile([folder num2str(i) '.png']));
     image = im2double(image);
 %     image = image(boader + 1: end-boader,boader + 1: end-boader,:);
-    image = image(pad_outputsize + 1: end-pad_outputsize,pad_outputsize + 1: end-pad_outputsize,:,:);
+%     image = image(pad_outputsize + 1: end-pad_outputsize,pad_outputsize + 1: end-pad_outputsize,:,:);
     %%
     hazyname = [num2str(i) '.png'];
     labels_image = fullfile(folderhazy,hazyname);
@@ -98,8 +98,8 @@ test_samples = single(data(:,:,:,train_num+1:end));
 test_labels = single(label(:,:,:,train_num+1:end));
 test_depths = single(depth(:,:,:,train_num+1:end));
 
-save('mat/now_T/patches_3','-v7.3','samples','labels','depths');
-save('mat/now_V/val_3','-v7.3','test_samples','test_labels','test_depths');
+save('mat/train/patches_1','-v7.3','samples','labels','depths');
+save('mat/val/val_1','-v7.3','test_samples','test_labels','test_depths');
 %%
 
 
