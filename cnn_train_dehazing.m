@@ -27,7 +27,7 @@ opts.numEpochs = 500 ;
 opts.gpus = [] ; % which GPU devices to use (none, one, or more)
 opts.learningRate = 0.01 ; % 0.001
 opts.continue = false ;
-opts.expDir = fullfile('data_Exp4','exp') ;
+opts.expDir = fullfile('data','exp') ;
 opts.conserveMemory = false ;
 opts.backPropDepth = +inf ;
 opts.sync = false ;
@@ -327,7 +327,7 @@ modelPath_sub = @(ep, ep2) fullfile(opts.expDir, sprintf('net-epoch-%d-%d.mat', 
 %----------------------------------------------------
 %%
 listing = dir(strcat(data_path,'/*.mat')); %% loop all the training data
-for pp  = 1:3              % for 600 pics
+for pp  = 1:length(listing)             % for 600 pics
     if training
         dataname_mat = strcat(data_path, 'patches_', num2str(pp), '.mat');
         load(dataname_mat); 
