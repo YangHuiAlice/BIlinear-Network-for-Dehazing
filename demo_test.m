@@ -16,7 +16,7 @@ I = im2double(imread(imagename));
 %% set parameters
 % up_scale = 3;
 %
-model = 'data_Exp4/exp/net-epoch-205.mat';
+model = 'models/non-noise-dehazing.mat';
 load(model)
 %
 pad_outputsize = 0;
