@@ -1,2 +1,17 @@
 # BIlinear-Network-for-Dehazing
 This is the matlab code for bilinear network using composition loss for dehazing.
+
+# training data preparation
+We use the NYU2 dataset. Download them from website "http://cs.nyu.edu/~silberman/datasets/nyu_depth_v2.html". 
+Use "gnerate_hazy_img_noise.m" to generate hazy noise images.
+
+Then use "generate_train.m" to make training data. Note "folder", "folderhazy" and "folderdepth" are for clear ground truth images, hazy images, depth maps respectively. Change them to your own path.
+
+# training
+use train.m to begin training. 
+
+# loss function
+vl_nnhazerobustloss.m  ---> The L2 norm loss used in the paper.
+
+# Testing
+Use "demo_test.m" to see the dehazed and denoised results of trained models.
