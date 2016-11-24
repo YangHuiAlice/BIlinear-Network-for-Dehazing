@@ -1,4 +1,4 @@
-function [delta_a, delta_t, energy_val] = vl_nnhazesquareloss_ori(A, T, labels, in, dzdy)
+function [delta_a, delta_t, energy_val] = vl_nnhazesquareloss(A, T, labels, in, dzdy)
 %%%%%%%%%%%%%%%%% Error for hazy image %%%%%%%%%%%%%%%%%%%
 batch_num = size(in,4);
 %
@@ -9,22 +9,24 @@ A_ini = A;
 T_ini = T;
 %
 T = repmat(T, [1,1, size(J,3), 1]);
+A = repmat(A, [1,1, size(J,3), 1]);
+hazyimg = T.*J + (1-T).*A;
+resdual_error=(hazyimg-in(:,:,1:3,:));
+%
+resdual_error2=(T_ini-gt_T);
 
-hazyimg = T.* J + (1-T).*A;
-resdual_error1=(hazyimg-in(:,:,1:3,:));   % E1---composition error
-resdual_error2=(T_ini-gt_T);              % E2---T error
-
-energy_val = 0.5 * sum(resdual_error1(:).^2)./ batch_num +0.5 * sum(resdual_error2(:).^2)./ batch_num ;
+energy_val = 0.5 * sum(resdual_error(:).^2)./ batch_num + 0.5 * sum(resdual_error2(:).^2)./ batch_num;
 
 %%
 if nargin <= 4 % return energy value
     delta_a = 0;
     delta_t = 0;
 else
-    delta_a = (resdual_error1 .* (1-T))*dzdy;
-    delta_t = (resdual_error1 .* (J-A))*dzdy;
+    delta_a = (resdual_error .* (1-T))*dzdy;
+    delta_t = (resdual_error .* (J-A))*dzdy;
     %% vector:
-    delta_t = sum(delta_t, 3) + resdual_error2 ;
+    delta_a = sum(delta_a, 3);
+    delta_t = sum(delta_t, 3) + resdual_error2;
    
 end
 
